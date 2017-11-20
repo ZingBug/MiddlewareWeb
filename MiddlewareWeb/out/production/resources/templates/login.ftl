@@ -44,11 +44,14 @@
         var salt="{*404||407||409||sinnowa#}";
         var pwd=$("#password").val();
         var md5Pwd=$.md5(pwd+salt);
+        var jsondata={"username":$("#username").val(),"password":md5Pwd};
         $.ajax({
             type:"POST",
             url:"login",
-            data:{"username":$("#username").val(),"password":md5Pwd},
-            dataType:'json',
+            //data:{"username":$("#username").val(),"password":md5Pwd},
+            data:JSON.stringify(jsondata),
+            dataType:"JSON",
+            contentType:"application/json;charset=utf-8",
             success: function(data){
                 if(data.result!="success")
                 {

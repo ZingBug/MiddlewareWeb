@@ -38,9 +38,8 @@ public class QueryController {
     //url:"/query/"+device+"/"+"sampleByTime?"+"time"+datetime,
 
     @RequestMapping(path = "/query/DS/sampleByTime",method = RequestMethod.GET,produces = "text/json;charset=UTF-8")
-    public void getDSSample(@RequestParam(value = "time",defaultValue = "1970-00-00 00:00:00") String time, HttpServletResponse response)
+    public void getDSSampleByTime(@RequestParam(value = "time",defaultValue = "1970-00-00 00:00:00") String time, HttpServletResponse response)
     {
-
         try
         {
             PrintWriter out=response.getWriter();
@@ -53,11 +52,26 @@ public class QueryController {
 
         }catch (ParseException e)
         {
-            logger.error("时间转换错误"+e.getMessage());
+            logger.error("时间转换错误 "+e.getMessage());
         }
         catch (IOException e)
         {
-            logger.error("读取http响应出错"+e.getMessage());
+            logger.error("读取http响应出错 "+e.getMessage());
+        }
+    }
+
+    @RequestMapping(path = "/query/DS/details",method = RequestMethod.GET,produces = "text/json;charset=UTF-8")
+    public void getDSSampleById(@RequestParam(value = "sampleId",defaultValue = "0") String sampleId,HttpServletResponse response)
+    {
+        try
+        {
+            PrintWriter out=response.getWriter();
+            JSONObject json=dsService.selectBySampleId(sampleId);//根据样本ID查找并转转换为json串
+            out.print(json);
+
+        }catch (IOException e)
+        {
+            logger.error("读取http响应出错 "+e.getMessage());
         }
     }
 

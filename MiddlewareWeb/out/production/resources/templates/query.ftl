@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" content="text/html">
     <meta name="viweport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../static/favicon.ico">
 
     <!--jquery-->
     <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
@@ -21,9 +22,30 @@
     <script src="/js/bootstrap-table.min.js" type="text/javascript"></script>
     <script src="/js/bootstrap-table-zh-CN.min.js" type="text/javascript"></script>
 
+    <!--IE10 viewport hack for Surface/desktop Windows 8 bug-->
+    <link rel="stylesheet" href="/css/ie10-viewport-bug-workaround.css" type="text/css">
+    <script src="/js/ie10-viewport-bug-workaround.js" type="text/javascript"></script>
+
 </head>
 <body>
+<nav class="navbar navbar-default navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">查询</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
 <hr>
+<p></p>
 <div class="container">
     <div class="row">
         <div class="col-sm-4">
@@ -58,6 +80,7 @@
 </div>
 </body>
 <script type="text/javascript">
+    var cur_device;
     var formatDateTime = function (date) {
         var y = date.getFullYear();
         var m = date.getMonth() + 1;
@@ -76,21 +99,22 @@
             locale:moment.locale('zh-cn')
         });
         $('#clearAll').click(function () {
-            var rows=[];
-            $('#table').bootstrapTable('load',rows);
+            $('#table').bootstrapTable('removeAll');
 
         });
         $('#query').click(function () {
             var datetime=$('#datetime').val()+" 00:00:00";
-            var device=$('#device').val();
+            cur_device=$('#device').val();
             $.ajax({
                 type:"GET",
-                url:"/query/"+device+"/"+"sampleByTime?"+"time="+datetime,
+                url:"/query/"+cur_device+"/"+"sampleByTime?"+"time="+datetime,
                 dataType:"json",
                 contentType:"charset=utf-8",
                 success:function (jsonText) {
                     var rows=[];
-                    $('#table').bootstrapTable('load',rows);
+                    //$('#table').bootstrapTable('load',rows);
+                    $('#table').bootstrapTable('removeAll');
+                    var i=1;
                     for(var key in jsonText)
                     {
                         if(jsonText.hasOwnProperty(key))
@@ -98,7 +122,7 @@
                             var value=jsonText[key];
                             var t=formatDateTime(new Date(value.time));
                             rows.push({
-                                id:value.id,
+                                id:i,
                                 sampleId:value.sampleId,
                                 patientId:value.patientId,
                                 firstName:value.firstName,
@@ -107,10 +131,11 @@
                                 sampleKind:value.sampleKind,
                                 time:t
                             });
+                            i++;
                         }
                     }
                     //$('#table').bootstrapTable('append',rows);
-                    $('#table').bootstrapTable('load',rows);
+                    $('#table').bootstrapTable('append',rows);
                 },
                 error:function () {
                     alert("获取数据失败！");
@@ -124,12 +149,13 @@
         striped:true,//是否显示行间隔色
         pagination:true,//是否显示分页
         sortable:true,//是否启用排序
-        sortName:'sampleId',
+        sortName:'id',
         sortOrder:'asc',
         pageSize:10,//每页的记录行数
-        pageList:[10,25,50,100],//可供选择的每页的行数
+        pageList:[10,25,50,100,-1],//可供选择的每页的行数
         search:true,//是否显示表格搜索
-        strictSearch:true,
+        strictSearch:true,//设置为true启用 全匹配搜索，否则为模糊搜索
+        searchOnEnterKey:false,//设置为true时，按回车触发搜索方法，否则自动触发搜索方法
         showColumns:true,//是否显示所有的列
         showRefresh:true,//是否显示刷新按钮
         minimumCountColumns:2,//最小允许的列数
@@ -138,7 +164,7 @@
         uniqueId:"id",//每一行的唯一标识，一般为主键列
         showToggle:true,//是否显示详细视图和列表视图的切换按钮
         cardView:false,//是否显示详细视图
-        detailView:false,//是否显示父子表
+        detailView:true,//是否显示父子表
         columns:[{
             field:'id',
             title:'编号',
@@ -171,7 +197,74 @@
             field:'time',
             title:'检测时间',
             sortable:true
-        },]
+        }],
+        //注册加载子表的事件
+        onExpandRow:function (index,row,$detail) {
+            expandTable(index,row,$detail);
+        }
     });
+    var expandTable=function (index,row,$detail) {
+        var cur_table=$detail.html('<table></table>').find('table');
+        $(cur_table).bootstrapTable({
+            pageSize:10,
+            pageList:[10,20,50,100,-1],
+            sortable:true,//是否启用排序
+            sortName:'item',
+            sortOrder:'asc',
+            columns:[{
+                field:'item',
+                title:'项目名',
+                sortable:true
+            },{
+                field:'fullName',
+                title:'项目全称'
+            },{
+                field:'result',
+                title:'结果'
+            },{
+                field:'unit',
+                title:'单位'
+            },{
+                field:'normalLow',
+                title:'正常最低值'
+            },{
+                field:'normalHigh',
+                title:'正常最高值'
+            },{
+                field:'indicate',
+                title:'提示'
+            }]
+        });
+        $.ajax({
+            type:"GET",
+            url:"/query/"+cur_device+"/"+"details?sampleId="+row.sampleId,
+            dataType:"json",
+            contentType:"charset=utf-8",
+            success:function (jsonText) {
+                var rows=[];
+                $(cur_table).bootstrapTable('load',rows);
+                for(var key in jsonText)
+                {
+                    if(jsonText.hasOwnProperty(key))
+                    {
+                        var value=jsonText[key];
+                        rows.push({
+                            item:value.item,
+                            fullName:value.fullName,
+                            result:value.result,
+                            unit:value.unit,
+                            normalLow:value.normalLow,
+                            normalHigh:value.normalHigh,
+                            indicate:value.indicate
+                        });
+                    }
+                }
+                $(cur_table).bootstrapTable('load',rows);
+            },
+            error:function () {
+                alert("获取数据详情失败！");
+            }
+        });
+    }
 </script>
 </html>

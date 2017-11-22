@@ -43,11 +43,30 @@ public class DSService {
     }
 
     /**
+     * 根据样本ID查询数据库，只会返回一条数据
+     * @param sampleId 样本ID
+     * @return json
+     */
+    public JSONObject selectBySampleId(String sampleId)
+    {
+        JSONObject json=new JSONObject();
+        List<DSSample> list=dsSampleDAO.selectBySampleId(sampleId);
+        for(DSSample dsSample:list)
+        {
+            if(!json.containsKey(dsSample.getSampleId()))
+            {
+                json.put(dsSample.getSampleId(),dsSample);
+            }
+        }
+        return json;
+    }
+
+    /**
      * 根据样本ID查询数据库，并返回json，一个样本ID内含有多条ITEM数据。
      * @param sampleId
      * @return
      */
-    public JSONObject selectBySampleId(String sampleId)
+    public JSONObject selectDetails(String sampleId)
     {
         JSONObject json=new JSONObject();
         List<DSSample> list=dsSampleDAO.selectBySampleId(sampleId);
@@ -118,6 +137,24 @@ public class DSService {
     }
 
     /**
+     * 返回生化数据库中的仪器型号列表
+     * @return json
+     */
+    public JSONObject getDevices()
+    {
+        JSONObject json=new JSONObject();
+        List<String> list=dsSampleDAO.getDevices();
+        for(String device:list)
+        {
+            if(!json.containsKey(device))
+            {
+                json.put(device,"");
+            }
+        }
+        return json;
+    }
+
+    /**
      * 往数据库添加新的样本信息
      * @param sample 新的样本
      */
@@ -147,4 +184,5 @@ public class DSService {
         sample.setIsGet(1);//设置为1
         dsSampleDAO.updateIsGet(sample);
     }
+
 }

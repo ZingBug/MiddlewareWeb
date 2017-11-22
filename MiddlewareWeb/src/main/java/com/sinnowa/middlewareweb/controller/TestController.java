@@ -15,10 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class TestController {
 
-    @RequestMapping(path = {"afax/test1"},method = RequestMethod.POST)
-    public void test(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(path = {"test"},method = {RequestMethod.GET,RequestMethod.POST})
+    public String test(HttpServletRequest request, HttpServletResponse response)
     {
-        System.out.println(request.getParameter("name"));
+        return "test";
+    }
+
+    @RequestMapping(path = {"table-time"},method = {RequestMethod.GET,RequestMethod.POST})
+    public String test1(HttpServletRequest request, HttpServletResponse response)
+    {
+        return "query/table-time";
     }
 
 }

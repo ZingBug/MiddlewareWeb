@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" content="text/html">
     <meta name="viweport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="../static/favicon.ico">
+    <link rel="icon" href="../../static/favicon.ico">
 
     <!--jquery-->
     <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
@@ -27,7 +27,7 @@
     <script src="/js/ie10-viewport-bug-workaround.js" type="text/javascript"></script>
 
     <!--Custom style-->
-    <link rel="stylesheet" href="/css/styple-sidebar.css" type="text/css">
+    <link rel="stylesheet" href="/css/style-sidebar.css" type="text/css">
 
 </head>
 <body>
@@ -52,17 +52,16 @@
                 <div class="col-sm-3 col-md-2">
                     <ul class="nav sidebar-nav">
                         <li class="sidebar-brand">
-                            <a href="#">查询方式</a>
+                            <a>查询方式</a>
                         </li>
-                        <li><a href="#time"><i class="fa"></i>时间</a></li>
-                        <li><a href="#name"><i class="fa"></i>姓名</a></li>
-                        <li><a href="#device"><i class="fa"></i>仪器</a></li>
-                        <li><a href="#sample"><i class="fa"></i>用户</a></li>
+                        <li><a href="#queryByTime"><i class="fa"></i>时间</a></li>
+                        <li><a href="#queryBySample"><i class="fa"></i>样本</a></li>
+                        <li><a href="#queryByDevice"><i class="fa"></i>仪器</a></li>
+                        <li><a href="#queryByName"><i class="fa"></i>姓名</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-
     </div>
 </nav>
 <div class="container col-lg-8 col-lg-offset-2" id="mainContext"></div>
@@ -75,7 +74,7 @@
             $('#mainContext').empty();
             $.ajax({
                 type:"GET",
-                url:"table-time",
+                url:href,
                 success:function (data) {
                     $('#mainContext').html(data);
                 }

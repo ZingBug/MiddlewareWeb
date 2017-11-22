@@ -48,12 +48,12 @@ public class MonitorController {
     }
 
     @RequestMapping(path = "monitor/DS/details",method = RequestMethod.GET,produces = "text/json;charset=UTF-8")
-    public void getRealDSSampleById(@RequestParam(value = "sampleId",defaultValue = "0") String sampleId, HttpServletResponse response)
+    public void getRealDSDetails(@RequestParam(value = "sampleId",defaultValue = "0") String sampleId, HttpServletResponse response)
     {
         try
         {
             PrintWriter out=response.getWriter();
-            JSONObject json=dsService.selectBySampleId(sampleId);
+            JSONObject json=dsService.selectDetails(sampleId);
             out.print(json);
         }catch (IOException e){
             logger.error("读取http响应出错 "+e.getMessage());

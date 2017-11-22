@@ -2,51 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" content="text/html">
-    <meta name="viweport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="../static/favicon.ico">
-
-    <!--jquery-->
-    <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" >
-    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-
-    <!--datetimepicker-->
-    <script src="/js/moment-with-locales.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css" type="text/css">
-    <script src="/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
-
-    <!--Bootstrap Table-->
-    <link rel="stylesheet" href="/css/bootstrap-table.min.css" type="text/css">
-    <script src="/js/bootstrap-table.min.js" type="text/javascript"></script>
-    <script src="/js/bootstrap-table-zh-CN.min.js" type="text/javascript"></script>
-
-    <!--IE10 viewport hack for Surface/desktop Windows 8 bug-->
-    <link rel="stylesheet" href="/css/ie10-viewport-bug-workaround.css" type="text/css">
-    <script src="/js/ie10-viewport-bug-workaround.js" type="text/javascript"></script>
 
 </head>
 <body>
-<nav class="navbar navbar-default navbar-inverse navbar-static-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">查询</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Help</a></li>
-            </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
-        </div>
-    </div>
-</nav>
 <hr>
-<p></p>
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-sm-4">
             <label class="control-label">请选择日期</label>
@@ -100,7 +60,6 @@
         });
         $('#clearAll').click(function () {
             $('#table').bootstrapTable('removeAll');
-
         });
         $('#query').click(function () {
             var datetime=$('#datetime').val()+" 00:00:00";
@@ -134,7 +93,6 @@
                             i++;
                         }
                     }
-                    //$('#table').bootstrapTable('append',rows);
                     $('#table').bootstrapTable('append',rows);
                 },
                 error:function () {

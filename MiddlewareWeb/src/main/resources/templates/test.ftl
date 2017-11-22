@@ -1,38 +1,89 @@
-<#assign base=request.contextPath />
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" http-equiv="content-type" content="text/html">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta charset="UTF-8" content="text/html">
+    <meta name="viweport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="../static/favicon.ico">
 
+    <!--jquery-->
+    <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="/bootstrap-4.0.0/dist/css/bootstrap.min.css" type="text/css" >
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" >
+    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 
-    <!-- Custom styles for this template -->
-    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <!--datetimepicker-->
+    <script src="/js/moment-with-locales.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css" type="text/css">
+    <script src="/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+
+    <!--Bootstrap Table-->
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css" type="text/css">
+    <script src="/js/bootstrap-table.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap-table-zh-CN.min.js" type="text/javascript"></script>
+
+    <!--IE10 viewport hack for Surface/desktop Windows 8 bug-->
+    <link rel="stylesheet" href="/css/ie10-viewport-bug-workaround.css" type="text/css">
+    <script src="/js/ie10-viewport-bug-workaround.js" type="text/javascript"></script>
+
+    <!--Custom style-->
+    <link rel="stylesheet" href="/css/styple-sidebar.css" type="text/css">
+
 </head>
-
 <body>
-
-<div class="container">
-
-    <form id="loginFrom" class="form-signin">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label  class="sr-only">Email address</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="User Name" required autofocus>
-        <label  class="sr-only">Password</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
+<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">查询</a>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="Login()">Sign in</button>
-    </form>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+        <!--Sidebar-->
+        <div id="wrapper">
+            <div class="overlay"></div>
+            <div class="row">
+                <div class="col-sm-3 col-md-2">
+                    <ul class="nav sidebar-nav">
+                        <li class="sidebar-brand">
+                            <a href="#">查询方式</a>
+                        </li>
+                        <li><a href="#time"><i class="fa"></i>时间</a></li>
+                        <li><a href="#name"><i class="fa"></i>姓名</a></li>
+                        <li><a href="#device"><i class="fa"></i>仪器</a></li>
+                        <li><a href="#sample"><i class="fa"></i>用户</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-</div> <!-- /container -->
+    </div>
+</nav>
+<div class="container col-lg-8 col-lg-offset-2" id="mainContext"></div>
 </body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("li").on("click",function () {
+            var href=$(this).find("a").attr('href');
+            href=href.replace("#","");
+            $('#mainContext').empty();
+            $.ajax({
+                type:"GET",
+                url:"table-time",
+                success:function (data) {
+                    $('#mainContext').html(data);
+                }
+            });
+            //阻止跳转
+            $(this).parents('li').addClass('active').siblings('li').removeClass('active');
+            return false;
+        });
+    });
+</script>
 </html>

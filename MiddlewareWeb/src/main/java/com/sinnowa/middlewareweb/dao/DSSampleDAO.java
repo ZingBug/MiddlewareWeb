@@ -51,4 +51,7 @@ public interface DSSampleDAO {
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where device=#{device}"})
     List<DSSample> selectByDevice(String device);
+
+    @Select({"select distinct device from ",TABLE_NAME})
+    List<String> getDevices();
 }

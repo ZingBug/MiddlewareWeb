@@ -39,7 +39,7 @@ public class LoginController {
         try
         {
             PrintWriter out=response.getWriter();
-            JSONObject jsonObject=JsonReader.receivePost(request);
+            JSONObject jsonObject=JsonReader.receivePost2Object(request);
 
             /*
             String username=request.getParameter("username");

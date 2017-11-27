@@ -1,10 +1,11 @@
 package com.sinnowa.middlewareweb;
 
 import com.sinnowa.middlewareweb.dao.DSSampleDAO;
+import com.sinnowa.middlewareweb.dao.DeviceDAO;
 import com.sinnowa.middlewareweb.dao.UserDAO;
 import com.sinnowa.middlewareweb.model.DSSample;
+import com.sinnowa.middlewareweb.model.Device;
 import com.sinnowa.middlewareweb.model.User;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
+
+import static com.sinnowa.middlewareweb.util.Utils.DateToShortFormate;
 
 /**
  * Created by ZingBug on 2017/11/14.
@@ -29,6 +30,9 @@ public class InitDataBaseTests {
 
     @Autowired
     private DSSampleDAO dsSampleDAO;
+
+    @Autowired
+    private DeviceDAO deviceDAO;
 
     @Test
     public void initData()
@@ -69,8 +73,19 @@ public class InitDataBaseTests {
             dsSampleDAO.addDSSample(dsSample);
         }
         /*测试DAO用例*/
-        /*
 
+        Device device=new Device("DEVICE");
+        deviceDAO.addDevice(device);
+        List<Device> deviceList=deviceDAO.selectTodayDevice();
+        for(Device device1:deviceList)
+        {
+            device1.setSampleCount0(1);
+            device1.setSampleCount2(5);
+            device1.setSampleCount6(13);
+            deviceDAO.updateResultByDeviceAndDate(device1);
+        }
+
+        /*
         dsSampleDAO.deleteBySampleId("SAMPLE0");
 
         dsSampleDAO.deleteById(2);

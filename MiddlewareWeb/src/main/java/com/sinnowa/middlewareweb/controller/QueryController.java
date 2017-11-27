@@ -148,7 +148,7 @@ public class QueryController {
 
     /**
      * 通过时间查询
-     * @return
+     * @return 时间查询视图
      */
     @RequestMapping(path = "queryByTime",method = RequestMethod.GET)
     public String queryByTime()
@@ -158,7 +158,7 @@ public class QueryController {
 
     /**
      * 通过样本查询
-     * @return
+     * @return 样本查询视图
      */
     @RequestMapping(path = "queryBySample",method = RequestMethod.GET)
     public String queryBySample()
@@ -167,8 +167,8 @@ public class QueryController {
     }
 
     /**
-     * 通过具体仪器测试
-     * @return
+     * 通过具体仪器查询
+     * @return 仪器查询视图
      */
     @RequestMapping(path = "queryByDevice",method = RequestMethod.GET)
     public String queryByDevice()
@@ -178,7 +178,7 @@ public class QueryController {
 
     /**
      * 通过病人姓名查询
-     * @return
+     * @return 病人查询视图
      */
     @RequestMapping(path = "queryByName",method = RequestMethod.GET)
     public String queryByName()

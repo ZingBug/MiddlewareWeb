@@ -35,7 +35,28 @@ CREATE TABLE `dssample`(
   `department` VARCHAR(64) NOT NULL DEFAULT '',
   `isGet` TINYINT(1)  NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`sampleId`,`item`,`sendTime`,`device`)
-
 )ENGINE=InnoDB DEFAULT CHARSET =utf8;
+
+DROP TABLE if EXISTS `device`;
+CREATE TABLE `device`(
+  `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
+  `time` DATETIME NOT NULL DEFAULT '1970-1-1 00:00:00',
+  `device` VARCHAR(128) NOT NULL DEFAULT '',
+  `sampleCount0` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount2` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount4` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount6` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount8` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount10` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount12` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount14` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount16` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount18` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount20` INT(11) unsigned NOT NULL DEFAULT 0,
+  `sampleCount22` INT(11) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`,`time`,`device`)
+)ENGINE =InnoDB DEFAULT CHARSET =utf8;
+
+
 
 

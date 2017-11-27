@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 public class JsonReader {
     private static final Logger logger= Logger.getLogger(JsonReader.class);
 
-    public static JSONObject receivePost(HttpServletRequest request) throws IOException
+    public static String receivePost2String(HttpServletRequest request) throws IOException
     {
         BufferedReader in=new BufferedReader(new InputStreamReader(request.getInputStream(),"utf-8"));
         String line=null;
@@ -23,6 +23,12 @@ public class JsonReader {
         {
             sb.append(line);
         }
-        return JSONObject.parseObject(sb.toString());
+        return sb.toString();
+    }
+
+    public static JSONObject receivePost2Object(HttpServletRequest request) throws IOException
+    {
+        String json=receivePost2String(request);
+        return JSONObject.parseObject(json);
     }
 }

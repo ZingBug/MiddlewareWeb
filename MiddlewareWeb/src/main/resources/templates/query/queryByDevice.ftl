@@ -72,11 +72,6 @@
         });
     };
     $(function () {
-        $('#datetimepick').datetimepicker({
-            defaultDate:new Date(),
-            format:'YYYY-MM-DD',
-            locale:moment.locale('zh-cn')
-        });
         $('#clearAll').click(function () {
             $('#table').bootstrapTable('removeAll');
         });

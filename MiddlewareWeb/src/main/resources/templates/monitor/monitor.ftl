@@ -29,17 +29,25 @@
     <!--Sidebar style-->
     <link rel="stylesheet" href="/css/style-sidebar.css" type="text/css">
 
+    <style>
+        canvas{
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+<nav class="navbar navbar-defalut navbar-inverse navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-brand">
             <img alt="sinnowa" style="max-width:120px;margin-top:-14px;" src="/sinnowa.png">
         </div>
         <div class="col-md-offset-2">
             <ul class="nav navbar-nav">
-                <li><a href="/monitor" target="_blank">监控</a></li>
-                <li class="active"><a>查询</a></li>
+                <li class="active"><a>监控</a> </li>
+                <li><a href="/query" target="_blank">查询</a> </li>
             </ul>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -48,20 +56,18 @@
                 <li><a>Help</a></li>
             </ul>
         </div>
-        <!--Sidebar-->
-        <div id="wrapper">
-            <div class="row">
-                <div class="col-sm-3 col-md-2">
-                    <ul class="nav sidebar-nav">
-                        <li class="sidebar-brand">
-                            <a>查询方式</a>
-                        </li>
-                        <li><a href="#queryByTime"><i class="fa"></i>时间</a></li>
-                        <li><a href="#queryBySample"><i class="fa"></i>样本</a></li>
-                        <li><a href="#queryByDevice"><i class="fa"></i>仪器</a></li>
-                        <li><a href="#queryByName"><i class="fa"></i>姓名</a></li>
-                    </ul>
-                </div>
+    </div>
+    <!--Sidebar-->
+    <div>
+        <div class="row">
+            <div class="col-sm-3 col-md-2">
+                <ul class="nav sidebar-nav">
+                    <li class="sidebar-brand">
+                        <a>监控模式</a>
+                    </li>
+                    <li><a href="#monitorSample"><i class="fa"></i>样本监控</a></li>
+                    <li><a href="#monitorDevice"><i class="fa"></i>仪器监控</a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -69,14 +75,18 @@
 <div class="container col-lg-8 col-lg-offset-2" id="mainContext"></div>
 </body>
 <script type="text/javascript">
+    var intervalId=-1;
     $(document).ready(function () {
         $("li").on("click",function () {
             var href=$(this).find("a").attr('href');
             if(RegExp("#").test(href))
             {
                 href=href.replace("#","");
+                clearInterval(intervalId);
                 $.get(href,function (data) {
-                    $('#mainContext').html(data)
+                    $('#mainContext').html(data,new function () {
+                        setTimeout("getIntervalID()",500);
+                    });
                 });
                 //阻止跳转
                 $(this).parents('li').addClass('active').siblings('li').removeClass('active');
@@ -84,5 +94,22 @@
             }
         });
     });
+    var getIntervalID=function () {
+        $.ajax({
+            type:"GET",
+            url:"/monitor/getIntervalID",
+            dataType:"json",
+            contentType:"charset=utf-8",
+            success:function (data) {
+                if(data.hasOwnProperty("intervalID"))
+                {
+                    intervalId=data["intervalID"];
+                }
+            },
+            error:function () {
+                alert("获取定时器ID失败");
+            }
+        })
+    }
 </script>
 </html>

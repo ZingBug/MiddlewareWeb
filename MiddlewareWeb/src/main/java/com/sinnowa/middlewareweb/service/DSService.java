@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
@@ -126,6 +128,25 @@ public class DSService {
     {
         JSONObject json=new JSONObject();
         List<DSSample> list=dsSampleDAO.selectByDevice(device);
+        for(DSSample dsSample:list)
+        {
+            if(!json.containsKey(dsSample.getSampleId()))
+            {
+                json.put(dsSample.getSampleId(),dsSample);
+            }
+        }
+        return json;
+    }
+
+    /**
+     * 根据日期查询最新的多条数据
+     * @param limit 数量限制
+     * @return json
+     */
+    public JSONObject selectNewSample(int limit)
+    {
+        JSONObject json=new JSONObject();
+        List<DSSample> list=dsSampleDAO.selectNewSameple(limit);
         for(DSSample dsSample:list)
         {
             if(!json.containsKey(dsSample.getSampleId()))

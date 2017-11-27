@@ -26,28 +26,30 @@
     <link rel="stylesheet" href="/css/ie10-viewport-bug-workaround.css" type="text/css">
     <script src="/js/ie10-viewport-bug-workaround.js" type="text/javascript"></script>
 
-    <!--Custom style-->
+    <!--Sidebar style-->
     <link rel="stylesheet" href="/css/style-sidebar.css" type="text/css">
 
 </head>
 <body>
 <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
     <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">查询</a>
+        <div class="navbar-brand">
+            <img alt="sinnowa" style="max-width:120px;margin-top:-14px;" src="/sinnowa.png">
+        </div>
+        <div class="col-md-offset-2">
+            <ul class="nav navbar-nav">
+                <li><a href="/monitor" target="_blank">监控</a></li>
+                <li class="active"><a>查询</a></li>
+            </ul>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a>Settings</a></li>
+                <li><a>Help</a></li>
             </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
         </div>
         <!--Sidebar-->
         <div id="wrapper">
-            <div class="overlay"></div>
             <div class="row">
                 <div class="col-sm-3 col-md-2">
                     <ul class="nav sidebar-nav">
@@ -70,18 +72,16 @@
     $(document).ready(function () {
         $("li").on("click",function () {
             var href=$(this).find("a").attr('href');
-            href=href.replace("#","");
-            $('#mainContext').empty();
-            $.ajax({
-                type:"GET",
-                url:href,
-                success:function (data) {
-                    $('#mainContext').html(data);
-                }
-            });
-            //阻止跳转
-            $(this).parents('li').addClass('active').siblings('li').removeClass('active');
-            return false;
+            if(RegExp("#").test(href))
+            {
+                href=href.replace("#","");
+                $.get(href,function (data) {
+                    $('#mainContext').html(data)
+                });
+                //阻止跳转
+                $(this).parents('li').addClass('active').siblings('li').removeClass('active');
+                return false;
+            }
         });
     });
 </script>

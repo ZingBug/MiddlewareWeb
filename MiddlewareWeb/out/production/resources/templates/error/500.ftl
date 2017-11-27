@@ -11,7 +11,7 @@
     <div class="error-page-container">
         <div class="error-page-main">
             <h3>
-                <strong>500</strong>很抱歉，服务器由于遇到错误而不能完成您的请求！
+                <strong>500</strong>很抱歉，服务器内部发生错误！
             </h3>
             <div class="error-page-actions">
                 <div>

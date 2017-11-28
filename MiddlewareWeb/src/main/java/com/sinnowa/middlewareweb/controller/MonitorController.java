@@ -49,6 +49,7 @@ public class MonitorController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=dsService.selectNewSample(8);//得到新的样本信息
             out.print(json);//返回
@@ -62,6 +63,7 @@ public class MonitorController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=dsService.selectDetails(sampleId);
             out.print(json);
@@ -79,6 +81,7 @@ public class MonitorController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=deviceService.selectTodaySampleCount();
             out.print(json);
@@ -129,6 +132,7 @@ public class MonitorController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject jsonObject=new JSONObject();
             jsonObject.put("intervalID",intervalID);

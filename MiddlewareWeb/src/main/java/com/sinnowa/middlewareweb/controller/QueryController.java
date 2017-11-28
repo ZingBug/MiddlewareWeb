@@ -49,6 +49,7 @@ public class QueryController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date start=format.parse(time);
@@ -72,6 +73,7 @@ public class QueryController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=dsService.selectByName(name);
             out.print(json);
@@ -87,6 +89,7 @@ public class QueryController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=dsService.selectByDevice(device);
             out.print(json);
@@ -102,6 +105,7 @@ public class QueryController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=dsService.selectBySampleId(sampleId);
             out.print(json);
@@ -112,11 +116,12 @@ public class QueryController {
         }
     }
 
-    @RequestMapping(path = "/query/DS/details",method = RequestMethod.GET,produces = "text/json;charset=UTF-8")
+    @RequestMapping(path = "/query/DS/details",method = RequestMethod.GET,produces = "text/json;charset=utf-8")
     public void getDSSampleDetails(@RequestParam(value = "sampleId",defaultValue = "0") String sampleId,HttpServletResponse response)
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=dsService.selectDetails(sampleId);//根据样本ID查找并转转换为json串
             out.print(json);
@@ -136,6 +141,7 @@ public class QueryController {
     {
         try
         {
+            response.setContentType("text/json;charset=UTF-8");
             PrintWriter out=response.getWriter();
             JSONObject json=dsService.getDevices();
             out.print(json);

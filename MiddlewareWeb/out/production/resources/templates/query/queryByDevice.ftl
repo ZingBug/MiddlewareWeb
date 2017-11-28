@@ -210,7 +210,7 @@
             type:"GET",
             url:"/query/"+cur_device+"/"+"details?sampleId="+row.sampleId,
             dataType:"json",
-            contentType:"charset=utf-8",
+            contentType:"text/json,charset=utf-8",
             success:function (jsonText) {
                 var rows=[];
                 $(cur_table).bootstrapTable('load',rows);

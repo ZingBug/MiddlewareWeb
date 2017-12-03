@@ -22,11 +22,50 @@
 </div>
 </body>
 <script type="text/javascript">
-    var intervalId;
     $(function () {
-        intervalId=setInterval(getReal,10*1000);
-        setIntervalID();
+        getFirstInfo();
+        connect();
     });
+    var getFirstInfo = function () {
+        $.ajax({
+            type:"GET",
+            url:"/monitor/device",
+            dataType:"json",
+            contentType:"charset=utf-8",
+            success:function (jsonText) {
+                displayInfo(jsonText);
+            },
+            error:function () {
+                //获取失败的情况
+            }
+        })
+    };
+    var displayInfo = function (jsonText) {
+        var rows=[];
+        for(var key in jsonText)
+        {
+            if(jsonText.hasOwnProperty(key))
+            {
+                var value=jsonText[key];
+                rows.push({
+                    device:value.device,
+                    sampleCount0:value.sampleCount0,
+                    sampleCount2:value.sampleCount2,
+                    sampleCount4:value.sampleCount4,
+                    sampleCount6:value.sampleCount6,
+                    sampleCount8:value.sampleCount8,
+                    sampleCount10:value.sampleCount10,
+                    sampleCount12:value.sampleCount12,
+                    sampleCount14:value.sampleCount14,
+                    sampleCount16:value.sampleCount16,
+                    sampleCount18:value.sampleCount18,
+                    sampleCount20:value.sampleCount20,
+                    sampleCount22:value.sampleCount22
+                });
+            }
+        }
+        $('#table').bootstrapTable('load',rows);
+    };
     $('#clearAll').click(function () {
         $('#table').bootstrapTable('removeAll');
     });
@@ -41,57 +80,18 @@
         minute = minute < 10 ? ('0' + minute) : minute;
         return y + '-' + m + '-' + d+' '+h+':'+minute;
     };
-    var setIntervalID=function () {
-        var jsondata={"intervalID":intervalId};
-        $.ajax({
-            type:"POST",
-            url:"/monitor/setIntervalID",
-            data:JSON.stringify(jsondata),
-            dataType:"JSON",
-            contentType:"application/json;charset=utf-8",
-            success:function () {
-                //发送成功
-            }
+    var connect = function () {
+        //连接websocket
+        var socket=new SockJS('/endpointWisely');//链接SockJS的endpoint命名为"/endpointWisely"
+        stompClient=Stomp.over(socket);//使用stomp子协议的websocket客户端
+        stompClient.connect({},function (frame) {//链接websocket的服务器端
+            console.log('Connected: '+frame);
+            stompClient.subscribe('/topic/getRealDevice',function (response) {//订阅/topic/getResponse目标发送的消息。
+                displayInfo(JSON.parse(response.body));
+            });
         });
     };
-    var getReal=function () {
-        //异步获取信息
-        $.ajax({
-            type:"GET",
-            url:"/monitor/device",
-            dataType:"json",
-            contentType:"charset=utf-8",
-            success:function (jsonText) {
-                var rows=[];
-                for(var key in jsonText)
-                {
-                    if(jsonText.hasOwnProperty(key))
-                    {
-                        var value=jsonText[key];
-                        rows.push({
-                            device:value.device,
-                            sampleCount0:value.sampleCount0,
-                            sampleCount2:value.sampleCount2,
-                            sampleCount4:value.sampleCount4,
-                            sampleCount6:value.sampleCount6,
-                            sampleCount8:value.sampleCount8,
-                            sampleCount10:value.sampleCount10,
-                            sampleCount12:value.sampleCount12,
-                            sampleCount14:value.sampleCount14,
-                            sampleCount16:value.sampleCount16,
-                            sampleCount18:value.sampleCount18,
-                            sampleCount20:value.sampleCount20,
-                            sampleCount22:value.sampleCount22
-                        });
-                    }
-                }
-                $('#table').bootstrapTable('load',rows);
-            },
-            error:function () {
-                //获取失败的情况
-            }
-        })
-    };
+
     $('#table').bootstrapTable({
         toolbar:'#toolbar',
         cache:false,//是否使用缓存，默认是true

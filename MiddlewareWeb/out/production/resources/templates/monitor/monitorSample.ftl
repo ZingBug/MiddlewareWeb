@@ -2,33 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" content="text/html">
-
-
-    <!--jquery-->
-    <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css" type="text/css" >
-    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-
-    <!--datetimepicker-->
-    <script src="/js/moment-with-locales.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css" type="text/css">
-    <script src="/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
-
-    <!--Bootstrap Table-->
-    <link rel="stylesheet" href="/css/bootstrap-table.min.css" type="text/css">
-    <script src="/js/bootstrap-table.min.js" type="text/javascript"></script>
-    <script src="/js/bootstrap-table-zh-CN.min.js" type="text/javascript"></script>
-
-    <!--IE10 viewport hack for Surface/desktop Windows 8 bug-->
-    <link rel="stylesheet" href="/css/ie10-viewport-bug-workaround.css" type="text/css">
-    <script src="/js/ie10-viewport-bug-workaround.js" type="text/javascript"></script>
-
-    <!--Sidebar style-->
-    <link rel="stylesheet" href="/css/style-sidebar.css" type="text/css">
-
-
 </head>
 <body>
 <div class="container-fluid">
@@ -50,11 +23,57 @@
 </body>
 <script type="text/javascript">
     var cur_device="DS";
-    var intervalId;
+    var stompClient=null;
     $(function () {
-        intervalId=setInterval(getReal,10*1000);
-        setIntervalID();
+        getFirstInfo();
+        connect();
     });
+    var getFirstInfo = function () {
+        $.ajax({
+            type:"GET",
+            url:"/monitor/"+cur_device,
+            dataType:"json",
+            contentType:"charset=utf-8",
+            success:function (jsonText) {
+                displayInfo(jsonText);
+            },
+            error:function () {
+                //获取失败的情况
+            }
+        })
+    };
+    var displayInfo = function (jsonText) {
+        var rows=[];
+        for(var key in jsonText)
+        {
+            if(jsonText.hasOwnProperty(key))
+            {
+                var value=jsonText[key];
+                var t=formatDateTime(new Date(value.time));
+                rows.push({
+                    sampleId:value.sampleId,
+                    patientId:value.patientId,
+                    firstName:value.firstName,
+                    sex:value.sex,
+                    device:value.device,
+                    sampleKind:value.sampleKind,
+                    time:t
+                });
+            }
+        }
+        $('#table').bootstrapTable('load',rows);
+    };
+    var connect = function () {
+        //连接websocket
+        var socket=new SockJS('/endpointWisely');//链接SockJS的endpoint命名为"/endpointWisely"
+        stompClient=Stomp.over(socket);//使用stomp子协议的websocket客户端
+        stompClient.connect({},function (frame) {//链接websocket的服务器端
+            console.log('Connected: '+frame);
+            stompClient.subscribe('/topic/getRealDSSample',function (response) {//订阅/topic/getResponse目标发送的消息。
+                displayInfo(JSON.parse(response.body));
+            });
+        });
+    };
     $('#clearAll').click(function () {
         $('#table').bootstrapTable('removeAll');
     });
@@ -68,51 +87,6 @@
         var minute = date.getMinutes();
         minute = minute < 10 ? ('0' + minute) : minute;
         return y + '-' + m + '-' + d+' '+h+':'+minute;
-    };
-    var setIntervalID=function () {
-        var jsondata={"intervalID":intervalId};
-        $.ajax({
-            type:"POST",
-            url:"/monitor/setIntervalID",
-            data:JSON.stringify(jsondata),
-            dataType:"JSON",
-            contentType:"application/json;charset=utf-8",
-            success:function () {
-                //发送成功
-            }
-        });
-    };
-    var getReal=function () {
-        $.ajax({
-            type:"GET",
-            url:"/monitor/"+cur_device,
-            dataType:"json",
-            contentType:"charset=utf-8",
-            success:function (jsonText) {
-                var rows=[];
-                for(var key in jsonText)
-                {
-                    if(jsonText.hasOwnProperty(key))
-                    {
-                        var value=jsonText[key];
-                        var t=formatDateTime(new Date(value.time));
-                        rows.push({
-                            sampleId:value.sampleId,
-                            patientId:value.patientId,
-                            firstName:value.firstName,
-                            sex:value.sex,
-                            device:value.device,
-                            sampleKind:value.sampleKind,
-                            time:t
-                        });
-                    }
-                }
-                $('#table').bootstrapTable('load',rows);
-            },
-            error:function () {
-                //获取失败的情况
-            }
-        })
     };
     $('#table').bootstrapTable({
         toolbar:'#toolbar',

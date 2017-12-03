@@ -55,6 +55,6 @@ public interface DSSampleDAO {
     @Select({"select distinct device from ",TABLE_NAME})
     List<String> getDevices();
 
-    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," ORDER BY time desc LIMIT #{limit}"})
+    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"group by sampleId ORDER BY time desc LIMIT #{limit}"})
     List<DSSample> selectNewSameple(int limit);
 }

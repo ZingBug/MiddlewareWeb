@@ -29,6 +29,10 @@
     <!--Sidebar style-->
     <link rel="stylesheet" href="/css/style-sidebar.css" type="text/css">
 
+    <!--WebSocket-->
+    <script src="/js/sockjs.min.js" type="text/javascript"></script>
+    <script src="/js/stomp.js" type="text/javascript"></script>
+
     <style>
         canvas{
             -moz-user-select: none;

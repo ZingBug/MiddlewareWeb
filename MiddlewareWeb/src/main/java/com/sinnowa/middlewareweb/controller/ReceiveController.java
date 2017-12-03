@@ -6,6 +6,7 @@ import com.sinnowa.middlewareweb.model.DSSample;
 import com.sinnowa.middlewareweb.model.Device;
 import com.sinnowa.middlewareweb.service.DSService;
 import com.sinnowa.middlewareweb.service.DeviceService;
+import com.sinnowa.middlewareweb.service.WebSocketService;
 import com.sinnowa.middlewareweb.util.JsonReader;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ReceiveController {
     @Autowired
     private DeviceService deviceService;
 
+    @Autowired
+    private WebSocketService webSocketService;
+
     @RequestMapping(path = "/receive/DS",method = {RequestMethod.GET,RequestMethod.POST},produces = "text/json;charset=UTF-8")
     public void reveiceDSSample(HttpServletRequest request, HttpServletResponse response)
     {
@@ -46,6 +50,9 @@ public class ReceiveController {
                     dsService.addSample(dsSample);
                     logger.info("接收样本数据成功 "+dsSample.getSampleId()+" "+dsSample.getItem());
                 }
+                //发送数据到监控画面
+                webSocketService.sendRealDSSample();
+                webSocketService.sendRealDevice();
             }
             else
             {

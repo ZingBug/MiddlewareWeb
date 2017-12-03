@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" content="text/html">
-    <meta name="viweport" content="width=device-width, initial-scale=1">
+    <meta name="viweport" content="width=device-width,initial-scale=1">
     <link rel="icon" href="../../static/favicon.ico">
 
     <!--jquery-->
@@ -29,29 +29,18 @@
     <!--Sidebar style-->
     <link rel="stylesheet" href="/css/style-sidebar.css" type="text/css">
 
-    <!--WebSocket-->
-    <script src="/js/sockjs.min.js" type="text/javascript"></script>
-    <script src="/js/stomp.js" type="text/javascript"></script>
-
-    <style>
-        canvas{
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-    </style>
 </head>
 <body>
-<nav class="navbar navbar-defalut navbar-inverse navbar-static-top">
+<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-brand">
-            <img alt="sinnowa" style="max-width:120px;margin-top:-14px;" src="/sinnowa.png">
+            <img alt="sinnowa" style="max-width: 120px;margin-top: -14px;" src="/sinnowa.png">
         </div>
         <div class="col-md-offset-2">
             <ul class="nav navbar-nav">
-                <li class="active"><a>监控</a> </li>
+                <li><a href="/monitor" target="_blank">监控</a> </li>
                 <li><a href="/query" target="_blank">查询</a> </li>
+                <li class="active"><a>管理</a></li>
             </ul>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -60,18 +49,17 @@
                 <li><a>Help</a></li>
             </ul>
         </div>
-    </div>
-    <!--Sidebar-->
-    <div>
-        <div class="row">
-            <div class="col-sm-3 col-md-2">
-                <ul class="nav sidebar-nav">
-                    <li class="sidebar-brand">
-                        <a>监控模式</a>
-                    </li>
-                    <li><a href="#monitorSample"><i class="fa"></i>样本监控</a></li>
-                    <li><a href="#monitorDevice"><i class="fa"></i>仪器监控</a></li>
-                </ul>
+        <!--Sidebar-->
+        <div id="wrapper">
+            <div class="row">
+                <div class="col-sm-3 col-md-2">
+                    <ul class="nav sidebar-nav">
+                        <li class="sidebar-brand">
+                            <a>管理设置</a>
+                        </li>
+                        <li><a href="#download"><i class="fa"></i>样本下发</a> </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -79,20 +67,5 @@
 <div class="container col-lg-8 col-lg-offset-2" id="mainContext"></div>
 </body>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("li").on("click",function () {
-            var href=$(this).find("a").attr('href');
-            if(RegExp("#").test(href))
-            {
-                href=href.replace("#","");
-                $.get(href,function (data) {
-                    $('#mainContext').html(data);
-                });
-                //阻止跳转
-                $(this).parents('li').addClass('active').siblings('li').removeClass('active');
-                return false;
-            }
-        });
-    });
 </script>
 </html>

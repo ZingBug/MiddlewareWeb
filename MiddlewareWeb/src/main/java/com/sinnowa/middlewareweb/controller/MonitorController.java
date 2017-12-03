@@ -41,7 +41,7 @@ public class MonitorController {
     //http://127.0.0.1:8080/login/?username=x&&password=y
 
     /**
-     * 得到实时样本，获取从当前到前2个小时的样本
+     * 得到实时样本，获取从当前到前2个小时的样本，目前只用于得到第一次的数据，后续数据采用websocket方式推送
      * @param response
      */
     @RequestMapping(path = "monitor/DS",method = RequestMethod.GET,produces = "text/json;charset=UTF-8")
@@ -91,7 +91,6 @@ public class MonitorController {
             logger.error("读取http响应出错 "+e.getMessage());
         }
     }
-
     /**
      * 监控仪器
      * @return 仪器监控视图
@@ -109,38 +108,5 @@ public class MonitorController {
     public String monitorSample()
     {
         return "monitor/monitorSample";
-    }
-    private int intervalID=-1;
-    @RequestMapping(path = "/monitor/setIntervalID",method = RequestMethod.POST)
-    @ResponseBody
-    public String setIntervalID(HttpServletRequest request)
-    {
-        try
-        {
-            JSONObject jsonObject=JsonReader.receivePost2Object(request);
-            intervalID=jsonObject.getInteger("intervalID");
-            return "OK";
-        }
-        catch (IOException e)
-        {
-            logger.error("设置定时器ID出错 "+e.getMessage());
-            return "NO";
-        }
-    }
-    @RequestMapping(path = "/monitor/getIntervalID",method = RequestMethod.GET)
-    public void getIntervalID(HttpServletResponse response)
-    {
-        try
-        {
-            response.setContentType("text/json;charset=UTF-8");
-            PrintWriter out=response.getWriter();
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("intervalID",intervalID);
-            out.print(jsonObject);
-        }
-        catch (IOException e)
-        {
-            logger.error("获取定时器ID出错 "+e.getMessage());
-        }
     }
 }

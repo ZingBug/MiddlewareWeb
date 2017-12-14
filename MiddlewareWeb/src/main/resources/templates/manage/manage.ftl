@@ -58,6 +58,7 @@
                             <a>管理设置</a>
                         </li>
                         <li><a href="#download"><i class="fa"></i>样本下发</a> </li>
+                        <li><a href="#itemIndex"><i class="fa"></i>项目编号</a> </li>
                     </ul>
                 </div>
             </div>
@@ -67,5 +68,20 @@
 <div class="container col-lg-8 col-lg-offset-2" id="mainContext"></div>
 </body>
 <script type="text/javascript">
+    $(document).ready(function () {
+        $("li").on("click",function () {
+            var href=$(this).find("a").attr('href');
+            if(RegExp("#").test(href))
+            {
+                href=href.replace("#","");
+                $.get(href,function (data) {
+                    $('#mainContext').html(data);
+                });
+                //阻止跳转
+                $(this).parents('li').addClass('active').siblings('li').removeClass('active');
+                return false;
+            }
+        })
+    })
 </script>
 </html>

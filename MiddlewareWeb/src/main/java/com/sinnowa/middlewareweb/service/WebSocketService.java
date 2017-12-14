@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 public class WebSocketService {
     private static final Logger logger=Logger.getLogger(WebSocketService.class);
 
-    private final static String monitorSampleUrl="/topic/getRealDSSample";
-    private final static String monitorDeviceUrl="/topic/getRealDevice";
+    private static final String monitorSampleUrl="/topic/getRealDSSample";
+    private static final String monitorDeviceUrl="/topic/getRealDevice";
 
     @Autowired
     private SimpMessagingTemplate template;//是Spring-WebSocket内置的一个消息发送工具，可以将消息发送到指定的客户端。

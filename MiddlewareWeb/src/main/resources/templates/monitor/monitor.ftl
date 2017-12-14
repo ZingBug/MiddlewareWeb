@@ -52,6 +52,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a>监控</a> </li>
                 <li><a href="/query" target="_blank">查询</a> </li>
+                <li><a href="/manage" target="_blank">管理</a> </li>
             </ul>
         </div>
         <div id="navbar" class="navbar-collapse collapse">

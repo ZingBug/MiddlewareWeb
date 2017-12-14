@@ -52,6 +52,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a>监控</a> </li>
                 <li><a href="/query" target="_blank">查询</a> </li>
+                <li><a href="/manage" target="_blank">管理</a> </li>
             </ul>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -79,18 +80,14 @@
 <div class="container col-lg-8 col-lg-offset-2" id="mainContext"></div>
 </body>
 <script type="text/javascript">
-    var intervalId=-1;
     $(document).ready(function () {
         $("li").on("click",function () {
             var href=$(this).find("a").attr('href');
             if(RegExp("#").test(href))
             {
                 href=href.replace("#","");
-                clearInterval(intervalId);
                 $.get(href,function (data) {
-                    $('#mainContext').html(data,new function () {
-                        setTimeout("getIntervalID()",500);
-                    });
+                    $('#mainContext').html(data);
                 });
                 //阻止跳转
                 $(this).parents('li').addClass('active').siblings('li').removeClass('active');
@@ -98,22 +95,5 @@
             }
         });
     });
-    var getIntervalID=function () {
-        $.ajax({
-            type:"GET",
-            url:"/monitor/getIntervalID",
-            dataType:"json",
-            contentType:"charset=utf-8",
-            success:function (data) {
-                if(data.hasOwnProperty("intervalID"))
-                {
-                    intervalId=data["intervalID"];
-                }
-            },
-            error:function () {
-                alert("获取定时器ID失败");
-            }
-        })
-    }
 </script>
 </html>

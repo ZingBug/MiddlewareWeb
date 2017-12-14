@@ -45,5 +45,9 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
 	//WebSocket
 	compile('org.springframework.boot:spring-boot-starter-websocket')
+	// https://mvnrepository.com/artifact/ca.uhn.hapi/hapi-structures-v231
+	compile group: 'ca.uhn.hapi', name: 'hapi-structures-v231', version: '2.3'
+	// https://mvnrepository.com/artifact/ca.uhn.hapi/hapi-base
+	compile group: 'ca.uhn.hapi', name: 'hapi-base', version: '2.3'
 
 }

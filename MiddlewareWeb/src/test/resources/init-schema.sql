@@ -57,6 +57,29 @@ CREATE TABLE `device`(
   PRIMARY KEY (`id`,`time`,`device`)
 )ENGINE =InnoDB DEFAULT CHARSET =utf8;
 
+DROP TABLE IF EXISTS `downsample`;
+CREATE TABLE `downsample`(
+  `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
+  `sampleId` VARCHAR(128) NOT NULL DEFAULT '',
+  `patientId` VARCHAR(128) NOT NULL DEFAULT '',
+  `firstName` VARCHAR(256) NOT NULL DEFAULT '',
+  `sex` VARCHAR(16) NOT NULL DEFAULT '',
+  `age` VARCHAR(16) NOT NULL DEFAULT '',
+  `device` VARCHAR(128) NOT NULL DEFAULT '',
+  `sendTime` DATETIME NOT NULL DEFAULT '1970-1-1 00:00:00',
+  PRIMARY KEY (`id`,`sampleId`,`device`,`sendTime`)
+)ENGINE = InnoDB DEFAULT CHARSET =utf8;
+
+DROP TABLE IF EXISTS `downtask`;
+CREATE TABLE `downtask`(
+  `sampleId` VARCHAR(128) NOT NULL DEFAULT '',
+  `item` VARCHAR(128) NOT NULL DEFAULT '',
+  `kind` VARCHAR(128) NOT NULL DEFAULT '',
+  `device` VARCHAR(128) NOT NULL DEFAULT '',
+  `sendTime` DATETIME NOT NULL DEFAULT '1970-1-1 00:00:00',
+  PRIMARY KEY (`sampleId`,`item`,`kind`,`device`,`sendTime`)
+)ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
 
 
 

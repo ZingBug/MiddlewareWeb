@@ -76,4 +76,27 @@ public class Utils {
         calendar.set(Calendar.SECOND, 0);
         return calendar.getTime();
     }
+
+    //根据年龄获得大体出生日期
+    public static Date AgeToDate(String age)
+    {
+
+        int ageInterge;
+        try
+        {
+            ageInterge=Integer.parseInt(age);
+        }catch (NumberFormatException e)
+        {
+            ageInterge=0;
+        }
+        return AgeToDate(ageInterge);
+    }
+
+    public static Date AgeToDate(int age)
+    {
+        calendar.setTime(new Date());
+        int year=calendar.get(Calendar.YEAR)-age;
+        calendar.set(Calendar.YEAR,year);
+        return calendar.getTime();
+    }
 }

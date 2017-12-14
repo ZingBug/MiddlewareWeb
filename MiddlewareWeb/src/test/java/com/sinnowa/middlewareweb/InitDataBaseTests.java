@@ -1,11 +1,11 @@
 package com.sinnowa.middlewareweb;
 
-import com.sinnowa.middlewareweb.dao.DSSampleDAO;
-import com.sinnowa.middlewareweb.dao.DeviceDAO;
-import com.sinnowa.middlewareweb.dao.UserDAO;
+import com.sinnowa.middlewareweb.dao.*;
 import com.sinnowa.middlewareweb.model.DSSample;
 import com.sinnowa.middlewareweb.model.Device;
 import com.sinnowa.middlewareweb.model.User;
+import com.sinnowa.middlewareweb.model.down.DownSampleInfo;
+import com.sinnowa.middlewareweb.model.down.DownSampleTaskInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.sinnowa.middlewareweb.util.Utils.DateToShortFormate;
@@ -33,6 +34,12 @@ public class InitDataBaseTests {
 
     @Autowired
     private DeviceDAO deviceDAO;
+
+    @Autowired
+    private DownSampleDAO downSampleDAO;
+
+    @Autowired
+    private DownTaskDAO downTaskDAO;
 
     @Test
     public void initData()
@@ -72,7 +79,7 @@ public class InitDataBaseTests {
             dsSample.setIsGet(0);
             dsSampleDAO.addDSSample(dsSample);
         }
-        /*测试DAO用例*/
+        /*测试DEVICEDAO用例*/
 
         Device device=new Device("DEVICE");
         deviceDAO.addDevice(device);
@@ -84,6 +91,18 @@ public class InitDataBaseTests {
             device1.setSampleCount6(13);
             deviceDAO.updateResultByDeviceAndDate(device1);
         }
+
+        /*测试DownSampleDAO*/
+        DownSampleInfo downSampleInfo=new DownSampleInfo();
+        List<DownSampleTaskInfo> taskInfos=new LinkedList<>();
+        taskInfos.add(new DownSampleTaskInfo());
+        taskInfos.add(new DownSampleTaskInfo());
+        downSampleInfo.setItems(taskInfos);
+        downSampleDAO.addDownSample(downSampleInfo);
+        DownSampleInfo downSampleInfo1=downSampleDAO.selectBySampleIdAndDevice("","");
+        downTaskDAO.addDownTask(new DownSampleTaskInfo());
+        DownSampleTaskInfo downSampleTaskInfo=downTaskDAO.selectBySampleIdAndDevice("","");
+        System.out.println( "结束");
 
         /*
         dsSampleDAO.deleteBySampleId("SAMPLE0");

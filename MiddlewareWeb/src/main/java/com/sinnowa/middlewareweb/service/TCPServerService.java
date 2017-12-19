@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.IllegalFormatPrecisionException;
 import java.util.Iterator;
 
@@ -148,9 +145,10 @@ public class TCPServerService {
                         }catch (IOException e)
                         {
                             //当客户端Socket关闭时，会走到这，清理资源
-                            if(!key.isAcceptable())
+                            SelectableChannel channel=key.channel();
+                            if(channel instanceof SocketChannel)
                             {
-                                //说明此时是在连接状态中，远程客户端突然断开
+                                //说明此时是在连接状态中(Socket通信中)，远程客户端突然断开
                                 String remoteAddress=((SocketChannel)key.channel()).getRemoteAddress().toString();
                                 logger.info(e.getMessage()+"  "+remoteAddress);
                                 //删除此连接客户端
@@ -162,7 +160,6 @@ public class TCPServerService {
                                 {
                                     logger.info("Old Client have disconnect");
                                 }
-
                             }
                             key.cancel();
                             try{
